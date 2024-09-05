@@ -1,0 +1,61 @@
+# Function to display the board
+def display_board(board):
+    for row in board:
+        print("|".join(row))
+        print("-" * 5)
+
+# Function to check for a win
+def check_win(board, mark):
+    # Check rows, columns, and diagonals for a win
+    for row in board:
+        if all(s == mark for s in row):
+            return True
+    for col in range(3):
+        if all(board[row][col] == mark for row in range(3)):
+            return True
+    if all(board[i][i] == mark for i in range(3)) or all(board[i][2-i] == mark for i in range(3)):
+        return True
+    return False
+
+# Function to check for a draw
+def check_draw(board):
+    return all(all(cell != " " for cell in row) for row in board)
+
+# Main function to play the game
+def play_game():
+    board = [[" " for _ in range(3)] for _ in range(3)]  # Initialize empty board
+    current_player = "X"  # Player X starts first
+
+    while True:
+        display_board(board)
+        print(f"Player {current_player}'s turn")
+
+        # Get player input
+        row = int(input("Enter row (0-2): "))
+        col = int(input("Enter column (0-2): "))
+
+        # Validate input
+        if board[row][col] != " ":
+            print("Cell already taken, try again.")
+            continue
+
+        # Place the mark on the board
+        board[row][col] = current_player
+
+        # Check for a win
+        if check_win(board, current_player):
+            display_board(board)
+            print(f"Player {current_player} wins!")
+            break
+
+        # Check for a draw
+        if check_draw(board):
+            display_board(board)
+            print("It's a draw!")
+            break
+
+        # Switch player
+        current_player = "O" if current_player == "X" else "X"
+
+# Start the game
+play_game()
